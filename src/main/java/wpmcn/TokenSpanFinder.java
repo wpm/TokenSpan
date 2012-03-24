@@ -10,7 +10,7 @@ import java.util.Set;
  * (token, type) pairs.
  * <p/>
  * Call <code>nextToken</code> for each (token, type) pair in the input. Call <code>complete</code> when the input
- * is exhausted. Either of these methods will return either a {@link TokenSpan} or <code>null</code>.
+ * is exhausted. Both of these methods return either a {@link TokenSpan} or <code>null</code>.
  *
  * @param <TOKEN> the type of the tokens in the spans
  */
