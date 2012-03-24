@@ -1,59 +1,65 @@
 package wpmcn;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class TaggedTokenStateMachine {
    public class Span extends ArrayList<String> {
+      final private String tag;
+
+      public Span(String tag, String token) {
+         this.tag = tag;
+         add(token);
+      }
+
+      @Override
+      public String toString() {
+         return tag + " " + super.toString();
+      }
+
+      public String getTag() {
+         return tag;
+      }
    }
 
-   final private Map<String, List<Span>> spans;
-   final private Span currentSpan = new Span();
-   private String currentSpanTag;
+   final protected Set<String> spanTags;
+   protected Span currentSpan;
 
    public TaggedTokenStateMachine(String... spanTags) {
-      spans = new HashMap<String, List<Span>>(spanTags.length);
-      for (String spanTag : spanTags)
-         spans.put(spanTag, new ArrayList<Span>());
+      this(Arrays.asList(spanTags));
    }
 
-   public Map<String, List<Span>> getSpans() {
-      return spans;
+   public TaggedTokenStateMachine(Collection<String> spanTags) {
+      this.spanTags = new HashSet<String>(spanTags);
    }
 
-   public void taggedToken(String token, String tag) {
-      if (spans.containsKey(tag)) {
-         if (tag.equals(currentSpanTag)) {
-            appendToSpan(token);
+   @Override
+   public String toString() {
+      return currentSpan + " " + spanTags;
+   }
+
+   public Span handleTaggedToken(String token, String tag) {
+      Span span = null;
+
+      if (spanTags.contains(tag)) {
+         if (tag.equals(currentSpan.getTag())) {
+            currentSpan.add(token);
          } else {
-            completeSpan();
-            beginSpan(token, tag);
+            span = complete();
+            currentSpan = new Span(tag, token);
          }
       } else {
-         completeSpan();
+         span = complete();
       }
+      return span;
    }
 
-   public void complete() {
-      completeSpan();
-   }
+   public Span complete() {
+      Span span = null;
 
-   private void beginSpan(String token, String tag) {
-      currentSpanTag = tag;
-      appendToSpan(token);
-   }
-
-   private void appendToSpan(String token) {
-      currentSpan.add(token);
-   }
-
-   private void completeSpan() {
-      if (!currentSpan.isEmpty()) {
-         spans.get(currentSpanTag).add(currentSpan);
-         currentSpanTag = null;
-         currentSpan.clear();
+      if (null != currentSpan) {
+         span = currentSpan;
+         currentSpan = null;
       }
+      return span;
    }
 }
