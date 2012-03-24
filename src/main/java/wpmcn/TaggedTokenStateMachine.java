@@ -6,17 +6,20 @@ import java.util.List;
 import java.util.Map;
 
 public class TaggedTokenStateMachine {
-   final private Map<String, List<List<String>>> spans;
-   final private List<String> currentSpan = new ArrayList<String>();
-   private String currentSpanTag;
-
-   public TaggedTokenStateMachine(String... spanTypes) {
-      spans = new HashMap<String, List<List<String>>>(spanTypes.length);
-      for (String spanType : spanTypes)
-         spans.put(spanType, new ArrayList<List<String>>());
+   public class Span extends ArrayList<String> {
    }
 
-   public Map<String, List<List<String>>> getSpans() {
+   final private Map<String, List<Span>> spans;
+   final private Span currentSpan = new Span();
+   private String currentSpanTag;
+
+   public TaggedTokenStateMachine(String... spanTags) {
+      spans = new HashMap<String, List<Span>>(spanTags.length);
+      for (String spanTag : spanTags)
+         spans.put(spanTag, new ArrayList<Span>());
+   }
+
+   public Map<String, List<Span>> getSpans() {
       return spans;
    }
 
