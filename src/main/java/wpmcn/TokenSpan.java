@@ -3,14 +3,18 @@ package wpmcn;
 import java.util.ArrayList;
 
 /**
- * A sequence of tokens with with an associated type.
+ * A sequence of tokens with with an associated type label.
+ * <p/>
+ * Two spans are equals if they contain the same sequence of tokens and have the same label.
+ *
+ * @param <TOKEN> the type of the tokens
  */
-public class TokenSpan extends ArrayList<String> {
+public class TokenSpan<TOKEN> extends ArrayList<TOKEN> {
    final private String type;
 
-   public TokenSpan(String type, String... tokens) {
+   public TokenSpan(String type, TOKEN... tokens) {
       this.type = type;
-      for (String token : tokens)
+      for (TOKEN token : tokens)
          add(token);
    }
 

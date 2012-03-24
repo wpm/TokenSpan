@@ -5,16 +5,17 @@ import org.junit.Test;
 
 import static junit.framework.Assert.*;
 
+@SuppressWarnings({"unchecked"}) // Needed for varargs argument to TokenSpan<TOKEN>(type, token)
 public class TokenSpanTest {
-   private TokenSpan noTokens;
-   private TokenSpan oneToken;
-   private TokenSpan twoTokens;
+   private TokenSpan<String> noTokens;
+   private TokenSpan<String> oneToken;
+   private TokenSpan<String> twoTokens;
 
    @Before
    public void setUp() throws Exception {
-      noTokens = new TokenSpan("ORGANIZATION");
-      oneToken = new TokenSpan("PERSON", "George");
-      twoTokens = new TokenSpan("LOCATION", "Los", "Angeles");
+      noTokens = new TokenSpan<String>("ORGANIZATION");
+      oneToken = new TokenSpan<String>("PERSON", "George");
+      twoTokens = new TokenSpan<String>("LOCATION", "Los", "Angeles");
    }
 
    @Test
@@ -26,17 +27,17 @@ public class TokenSpanTest {
 
    @Test
    public void testEquals() throws Exception {
-      assertTrue(noTokens.equals(new TokenSpan("ORGANIZATION")));
-      assertTrue(oneToken.equals(new TokenSpan("PERSON", "George")));
-      assertTrue(twoTokens.equals(new TokenSpan("LOCATION", "Los", "Angeles")));
+      assertTrue(noTokens.equals(new TokenSpan<String>("ORGANIZATION")));
+      assertTrue(oneToken.equals(new TokenSpan<String>("PERSON", "George")));
+      assertTrue(twoTokens.equals(new TokenSpan<String>("LOCATION", "Los", "Angeles")));
    }
 
    @Test
    public void testNotEqual() throws Exception {
       assertFalse(noTokens.equals(oneToken));
       assertFalse(oneToken.equals(twoTokens));
-      assertFalse(noTokens.equals(new TokenSpan("PERSON")));
-      assertFalse(oneToken.equals(new TokenSpan("PERSON", "Mila")));
-      assertFalse(twoTokens.equals(new TokenSpan("LOCATION", "Los", "Lobos")));
+      assertFalse(noTokens.equals(new TokenSpan<String>("PERSON")));
+      assertFalse(oneToken.equals(new TokenSpan<String>("PERSON", "Mila")));
+      assertFalse(twoTokens.equals(new TokenSpan<String>("LOCATION", "Los", "Lobos")));
    }
 }

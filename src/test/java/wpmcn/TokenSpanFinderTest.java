@@ -9,30 +9,34 @@ import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 
+@SuppressWarnings({"unchecked"}) // Needed for varargs argument to TokenSpan<TOKEN>(type, token)
 public class TokenSpanFinderTest {
    private String personLocationSentence;
 
    @Before
    public void setUp() throws Exception {
-      personLocationSentence = "George/PERSON Clooney/PERSON and/OTHER Mila/PERSON Kunis/PERSON live/OTHER " +
-            "in/OTHER Los/LOCATION Angeles/LOCATION";
+      // Make the last token part of a span we're interested in so that we are required to make the final complete()
+      // call.
+      personLocationSentence =
+            "George/PERSON Clooney/PERSON and/OTHER Mila/PERSON Kunis/PERSON " +
+                  "live/OTHER " + "in/OTHER Los/LOCATION Angeles/LOCATION";
    }
 
    @Test
    public void testNameAndLocation() throws Exception {
-      TokenSpanFinder personLocation = new TokenSpanFinder("PERSON", "LOCATION");
-      List<TokenSpan> expected = Arrays.asList(
-            new TokenSpan("PERSON", "George", "Clooney"),
-            new TokenSpan("PERSON", "Mila", "Kunis"),
-            new TokenSpan("LOCATION", "Los", "Angeles")
+      TokenSpanFinder<String> personLocation = new TokenSpanFinder<String>("PERSON", "LOCATION");
+      List<TokenSpan<String>> expected = Arrays.asList(
+            new TokenSpan<String>("PERSON", "George", "Clooney"),
+            new TokenSpan<String>("PERSON", "Mila", "Kunis"),
+            new TokenSpan<String>("LOCATION", "Los", "Angeles")
       );
-      List<TokenSpan> actual = handleSentence(personLocation, personLocationSentence);
+      List<TokenSpan<String>> actual = handleSentence(personLocation, personLocationSentence);
       assertEquals(expected, actual);
    }
 
-   private List<TokenSpan> handleSentence(TokenSpanFinder m, String sentence) {
-      List<TokenSpan> spans = new ArrayList<TokenSpan>();
-      TokenSpan span;
+   private List<TokenSpan<String>> handleSentence(TokenSpanFinder<String> m, String sentence) {
+      List<TokenSpan<String>> spans = new ArrayList<TokenSpan<String>>();
+      TokenSpan<String> span;
       for (String taggedToken : sentence.split("\\s+")) {
          String[] fields = taggedToken.split("/");
          span = m.nextToken(fields[0], fields[1]);
