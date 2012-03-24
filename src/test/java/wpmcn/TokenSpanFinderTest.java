@@ -35,7 +35,7 @@ public class TokenSpanFinderTest {
       TokenSpan span;
       for (String taggedToken : sentence.split("\\s+")) {
          String[] fields = taggedToken.split("/");
-         span = m.handleTaggedToken(fields[0], fields[1]);
+         span = m.nextToken(fields[0], fields[1]);
          if (null != span)
             spans.add(span);
       }

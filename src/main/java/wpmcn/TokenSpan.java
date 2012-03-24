@@ -2,22 +2,25 @@ package wpmcn;
 
 import java.util.ArrayList;
 
+/**
+ * A sequence of tokens with with an associated type.
+ */
 public class TokenSpan extends ArrayList<String> {
-   final private String tag;
+   final private String type;
 
-   public TokenSpan(String tag, String... tokens) {
-      this.tag = tag;
+   public TokenSpan(String type, String... tokens) {
+      this.type = type;
       for (String token : tokens)
          add(token);
    }
 
    @Override
    public String toString() {
-      return tag + " " + super.toString();
+      return type + " " + super.toString();
    }
 
-   public String getTag() {
-      return tag;
+   public String getType() {
+      return type;
    }
 
    @Override
@@ -28,7 +31,7 @@ public class TokenSpan extends ArrayList<String> {
 
       TokenSpan span = (TokenSpan) o;
 
-      if (tag != null ? !tag.equals(span.tag) : span.tag != null) return false;
+      if (type != null ? !type.equals(span.type) : span.type != null) return false;
 
       return true;
    }
@@ -36,7 +39,7 @@ public class TokenSpan extends ArrayList<String> {
    @Override
    public int hashCode() {
       int result = super.hashCode();
-      result = 31 * result + (tag != null ? tag.hashCode() : 0);
+      result = 31 * result + (type != null ? type.hashCode() : 0);
       return result;
    }
 }
